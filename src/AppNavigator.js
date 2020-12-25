@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 const RootStack = (props) => {
   return (
     <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen name="TCASter" component={HomeScreen} />
+      <Stack.Screen name="TCASter Assignment" component={HomeScreen} />
     </Stack.Navigator>
   );
 };

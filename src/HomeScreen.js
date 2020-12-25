@@ -1,166 +1,79 @@
 import React, { Component } from 'react'
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, ImageBackground } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, ImageBackground } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-
-
-const DATA = [
-    {
-        id: "1",
-        faculty: "คณะวิทยาศาสตร์",
-        logo: "https://topumin.com/images/skooldio/science.jpg",
-        department: "ฟิสิกส์ประยุกต์ (หลักสูตรสองภาษา) สาขาเอกฟิสิกส์",
-        university: "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
-        round: ["1", "", "", ""],
-        min_score: "",
-    },
-    {
-        id: "2",
-        faculty: "คณะวิทยาศาสตร์",
-        logo: "https://topumin.com/images/skooldio/science.jpg",
-        department: "ฟิสิกส์ประยุกต์ (หลักสูตรสองภาษา) สาขาเอกฟิสิกส์วัสดุและเทคโนโลยีนาโน",
-        university: "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
-        round: ["1", "", "", ""],
-        min_score: "",
-    },
-    {
-        id: "3",
-        faculty: "คณะวิทยาศาสตร์",
-        department: "สาขาวิชาเคมี",
-        logo: "https://topumin.com/images/skooldio/science.jpg",
-        university: "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
-        round: ["1", "2", "3", ""],
-        min_score: "12,750.00",
-    },
-    {
-        id: "4",
-        faculty: "คณะวิทยาศาสตร์",
-        department: "สาขาวิชาคณิตศาสตร์",
-        logo: "https://topumin.com/images/skooldio/science.jpg",
-        university: "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
-        round: ["1", "2", "3", ""],
-        min_score: "13,460.60",
-    },
-    {
-        id: "5",
-        faculty: "คณะวิทยาศาสตร์",
-        department: "สาขาวิชาสถิติ",
-        logo: "https://topumin.com/images/skooldio/science.jpg",
-        university: "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
-        round: ["1", "2", "3", ""],
-        min_score: "3,915.00",
-    },
-    {
-        id: "6",
-        faculty: "คณะวิทยาศาสตร์",
-        department: "สาขาวิชาวิทยาการคอมพิวเตอร์ประยุกต์",
-        logo: "https://topumin.com/images/skooldio/science.jpg",
-        university: "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
-        round: ["1", "2", "3", ""],
-        min_score: "15,578.00",
-    },
-    {
-        id: "7",
-        faculty: "คณะวิทยาศาสตร์",
-        department: "สาขาวิชาจุลชีววิทยา",
-        logo: "https://topumin.com/images/skooldio/science.jpg",
-        university: "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
-        round: ["1", "2", "3", ""],
-        min_score: "14,018.20",
-    },
-    {
-        id: "8",
-        faculty: "คณะวิทยาศาสตร์",
-        department: "สาขาวิชาวิทยาศาสตร์การอาหาร",
-        logo: "https://topumin.com/images/skooldio/science.jpg",
-        university: "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
-        round: ["1", "2", "3", ""],
-        min_score: "16,314.90",
-    },
-    {
-        id: "9",
-        faculty: "คณะวิทยาศาสตร์",
-        department: "สาขาวิชาฟิสิกส์ประยุกต์ (หลักสูตรสองภาษา)",
-        logo: "https://topumin.com/images/skooldio/science.jpg",
-        university: "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
-        round: ["", "2", "3", ""],
-        min_score: "8,824.00",
-    },
-];
-
-
-
-const Item = ({ faculty, logo, department, university, round, min_score }) => (
-    <TouchableOpacity style={styles.item} setOpacityTo={50}>
-        <View style={styles.top}>
-            <ImageBackground source={{uri: logo}} style={styles.logo}></ImageBackground>
-            <View style={styles.topRight}>
-                <View style={styles.detail}>
-                    <Text style={styles.faculty}>{faculty}</Text>
-                    <Text style={styles.department}>{department}</Text>
-                    <Text style={styles.university}>{university}</Text>
-                </View>
-                <View style={styles.arrow}>
-                    <Text style={[styles.university, {fontSize: 12}]}> > </Text>
-                </View>
-            </View>
-        </View>
-        <View style={styles.bottom}>
-            <View style={styles.bottomLeft}>
-                <Text style={styles.roundLabel}>รอบที่เปิด</Text>
-            </View>
-            <View style={styles.bottomRight}>
-                <View style={styles.roundGroup}>
-                    { 
-                        round.map((item, key)=>(
-                            <View style={{flexDirection: 'row'}}>
-                                {item == "" ?
-                                    (<Text key={key} style={styles.roundInActive}> {key+1} </Text>) : (<Text key={key} style={styles.roundActive}> {item} </Text>)
-                                }
-                            </View>
-                        )) 
-                    }
-                </View>
-                <View style={[styles.minScore]}>
-                    { min_score != "" ? (<Text style={styles.minScoreLabel}>ต่ำสุด '62</Text>) : null }
-                    <Text style={styles.score}>{min_score}</Text>
-                </View>
-            </View>
-        </View>
-        
-    </TouchableOpacity>
-);
+import axios from 'axios';
 
 export class HomeScreen extends Component {
-    render() {
 
-        const renderItem = ({ item }) => (
-            <View>
-                <Item 
-                    logo={item.logo}
-                    faculty={item.faculty}
-                    department={item.department}
-                    university={item.university}
-                    round={item.round}
-                    min_score={item.min_score}
-                />
+    constructor(props){
+        super(props);
+        this.state = {
+            data: [],
+        }
+    }
+
+    componentDidMount(){
+        const url = 'https://topumin.com/images/skooldio/data.php';
+        axios.get(url)
+        .then(response=>{
+            this.setState({data: response.data.data})
+        })
+        .catch(error=>{
+            alert(JSON.stringify(error));
+        })
+    }
+
+    renderItemList(item){
+        return(
+            <TouchableOpacity style={styles.item} setOpacityTo={70}>
+            <View style={styles.top}>
+                <ImageBackground source={{uri: item.logo}} style={styles.logo}></ImageBackground>
+                <View style={styles.topRight}>
+                    <View style={styles.detail}>
+                        <Text style={styles.faculty}>{item.faculty}</Text>
+                        <Text style={styles.department}>{item.department}</Text>
+                        <Text style={styles.university}>{item.university}</Text>
+                    </View>
+                    <View style={styles.arrow}>
+                        <Text style={[styles.university, {fontSize: 12}]}> {'>'} </Text>
+                    </View>
+                </View>
             </View>
-        );
-          
+            <View style={styles.bottom}>
+                <View style={styles.bottomLeft}>
+                    <Text style={styles.roundLabel}>รอบที่เปิด</Text>
+                </View>
+                <View style={styles.bottomRight}>
+                    <View style={styles.roundGroup}>
+                        {item.round[0] == 1 ? (<Text style={styles.roundActive}> {item.round[0]} </Text>) : (<Text style={styles.roundInActive}> 1 </Text>)}
+                        {item.round[1] == 2 ? (<Text style={styles.roundActive}> {item.round[1]} </Text>) : (<Text style={styles.roundInActive}> 2 </Text>)}
+                        {item.round[2] == 3 ? (<Text style={styles.roundActive}> {item.round[2]} </Text>) : (<Text style={styles.roundInActive}> 3 </Text>)}
+                        {item.round[3] == 4 ? (<Text style={styles.roundActive}> {item.round[3]} </Text>) : (<Text style={styles.roundInActive}> 4 </Text>)}
+                    </View>
+                    <View style={[styles.minScore]}>
+                        { item.min_score != "" ? (<Text style={styles.minScoreLabel}>ต่ำสุด '62</Text>) : null }
+                        <Text style={styles.score}>{item.min_score}</Text>
+                    </View>
+                </View>
+            </View>
+            
+        </TouchableOpacity>
+    )}
+
+    render() {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.navigateTab}>
-                    <Text style={[styles.navigateText, {fontFamily: 'Prompt-Regular', color: '#969696',}]}>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี / คณะวิทยาศาสตร์พบทั้งหมด {DATA.length} สาขา </Text>
+                    <Text style={[styles.navigateText, {fontFamily: 'Prompt-Regular', color: '#969696',}]}>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี / คณะวิทยาศาสตร์พบทั้งหมด 9 สาขา </Text>
                 </View>
                 <ScrollView>
                     <FlatList
-                        data={DATA}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.id}
+                        data={this.state.data}
+                        renderItem={ ({item}) => this.renderItemList(item) }
                     />
                 </ScrollView>
             </SafeAreaView>
-          );
-
+        )
     }
 }
 
@@ -170,16 +83,16 @@ const styles = StyleSheet.create({
         color: '#e9585f',
         fontSize: 12.5,
         fontFamily: 'Prompt-Bold',
-        lineHeight: 15,
+        lineHeight: 18,
     },
     department: {
         color: '#949494',
         fontSize: 12.5,
         fontFamily: 'Prompt-SemiBold',
-        lineHeight: 15,
+        lineHeight: 18,
     },
     university: {
-        marginTop: 5,
+        marginTop: 8,
         color: '#949494',
         fontSize: 11.5,
         fontFamily: 'Prompt-Regular',
@@ -197,20 +110,14 @@ const styles = StyleSheet.create({
     },
     score: {
         color: '#5d5d5d',
-        fontSize: 12.5,
+        fontSize: 14,
         fontFamily: 'Prompt-Medium',
     },
 
-    //layer
-    item: {
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: '#fafafa',
-        paddingVertical: 11,
-        paddingHorizontal: 11,
-        marginVertical: 0,
-        borderBottomColor: "#ccc",
-        borderBottomWidth: 2,
+    //layout
+    container: {
+        flex: 1,
+        height: '100%',
     },
     top: {
         display: 'flex',
@@ -224,16 +131,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         flex: 1,
-    },
-    detail: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        flex: 1,
-    },
-    arrow: {
-        width: 15,
     },
     bottom: {
         display: 'flex',
@@ -253,10 +150,17 @@ const styles = StyleSheet.create({
     },
 
 
-    // general
-    container: {
-      flex: 1,
-      height: '100%',
+    // customize
+    item: {
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: '#fff',
+        paddingBottom: 8,
+        paddingTop: 11,
+        paddingHorizontal: 11,
+        marginVertical: 0,
+        borderBottomColor: "#ccc",
+        borderBottomWidth: 2,
     },
     navigateTab: {
         paddingVertical: 10,
@@ -270,6 +174,16 @@ const styles = StyleSheet.create({
         width: 55,
         height: 55,
         marginRight: 10,
+    },
+    detail: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        flex: 1,
+    },
+    arrow: {
+        width: 15,
     },
     roundGroup: {
         display: 'flex',
@@ -307,7 +221,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'flex-end',
         flex: 1,
-        // marginBottom: -15,
     },
   });
 
