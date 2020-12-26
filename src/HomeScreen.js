@@ -1,90 +1,209 @@
-import React, { Component } from 'react'
-import { SafeAreaView, View, FlatList, StyleSheet, Text, ImageBackground } from 'react-native';
+import React, {useState} from 'react';
+import { SafeAreaView, View, StyleSheet, Text, FlatList, Image, Modal,} from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import axios from 'axios';
 
-export class HomeScreen extends Component {
+export default function HomeScreen() {
+  
+    // Declare vriable
 
-    constructor(props){
-        super(props);
-        this.state = {
-            data: [],
+    const [seconds, setSeconds] = React.useState(900);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [datas, setData] = useState([ 
+        {
+            "id": "1",
+            "faculty": "คณะวิทยาศาสตร์",
+            "department": "ฟิสิกส์ประยุกต์ (หลักสูตรสองภาษา) สาขาเอกฟิสิกส์",
+            "logo": "https://topumin.com/images/skooldio/science.jpg",
+            "university": "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
+            "round": ["1"],
+            "min_score": "",
+        },
+        {
+            "id": "2",
+            "faculty": "คณะวิทยาศาสตร์",
+            "department":"ฟิสิกส์ประยุกต์ (หลักสูตรสองภาษา) สาขาเอกฟิสิกส์วัสดุและเทคโนโลยีนาโน",
+            "logo": "https://topumin.com/images/skooldio/science.jpg",
+            "university": "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
+            "round": ["1"],
+            "min_score": "",
+        },
+        {
+            "id": "3",
+            "faculty": "คณะวิทยาศาสตร์",
+            "department": "สาขาวิชาเคมี",
+            "logo": "https://topumin.com/images/skooldio/science.jpg",
+            "university": "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
+            "round": ["1", "2", "3"],
+            "min_score": "12,750.00",
+        },
+        {
+            "id": "4",
+            "faculty": "คณะวิทยาศาสตร์",
+            "department": "สาขาวิชาคณิตศาสตร์",
+            "logo": "https://topumin.com/images/skooldio/science.jpg",
+            "university": "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
+            "round": ["1", "2", "3"],
+            "min_score": "13,460.60",
+        },
+        {
+            "id": "5",
+            "faculty": "คณะวิทยาศาสตร์",
+            "department": "สาขาวิชาสถิติ",
+            "logo": "https://topumin.com/images/skooldio/science.jpg",
+            "university": "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
+            "round": ["1", "2", "3"],
+            "min_score": "3,915.00",
+        },
+        {
+            "id": "6",
+            "faculty": "คณะวิทยาศาสตร์",
+            "department": "สาขาวิชาวิทยาการคอมพิวเตอร์ประยุกต์",
+            "logo": "https://topumin.com/images/skooldio/science.jpg",
+            "university": "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
+            "round": ["1", "2", "3"],
+            "min_score": "15,578.00",
+        },
+        {
+            "id": "7",
+            "faculty": "คณะวิทยาศาสตร์",
+            "department": "สาขาวิชาจุลชีววิทยา",
+            "logo": "https://topumin.com/images/skooldio/science.jpg",
+            "university": "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
+            "round": ["1", "2", "3"],
+            "min_score": "14,018.20",
+        },
+        {
+            "id": "8",
+            "faculty": "คณะวิทยาศาสตร์",
+            "department": "สาขาวิชาวิทยาศาสตร์การอาหาร",
+            "logo": "https://topumin.com/images/skooldio/science.jpg",
+            "university": "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
+            "round": ["1", "2", "3"],
+            "min_score": "16,314.90",
+        },
+        {
+            "id": "9",
+            "faculty": "คณะวิทยาศาสตร์",
+            "department": "สาขาวิชาฟิสิกส์ประยุกต์ (หลักสูตรสองภาษา)",
+            "logo": "https://topumin.com/images/skooldio/science.jpg",
+            "university": "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
+            "round": ["2", "3"],
+            "min_score": "8,824.00",
+        },
+    ]);
+
+    // Warning user to rest their eyes
+
+    React.useEffect(() => {
+        if (seconds > 0) {
+            setTimeout(() => setSeconds(seconds - 1), 1000);
+            setModalVisible(false);
+        }else{
+            setModalVisible(true);
         }
-    }
+    });
 
-    componentDidMount(){
-        const url = 'https://topumin.com/images/skooldio/data.php';
-        axios.get(url)
-        .then(response=>{
-            this.setState({data: response.data.data})
-        })
-        .catch(error=>{
-            alert(JSON.stringify(error));
-        })
-    }
-
-    renderItemList(item){
-        return(
-            <TouchableOpacity style={styles.item} setOpacityTo={70}>
-            <View style={styles.top}>
-                <ImageBackground source={{uri: item.logo}} style={styles.logo}></ImageBackground>
-                <View style={styles.topRight}>
-                    <View style={styles.detail}>
-                        <Text style={styles.faculty}>{item.faculty}</Text>
-                        <Text style={styles.department}>{item.department}</Text>
-                        <Text style={styles.university}>{item.university}</Text>
-                    </View>
-                    <View style={styles.arrow}>
-                        <Text style={[styles.university, {fontSize: 12}]}> {'>'} </Text>
-                    </View>
-                </View>
-            </View>
-            <View style={styles.bottom}>
-                <View style={styles.bottomLeft}>
-                    <Text style={styles.roundLabel}>รอบที่เปิด</Text>
-                </View>
-                <View style={styles.bottomRight}>
-                    <View style={styles.roundGroup}>
-                        {item.round[0] == 1 ? (<Text style={styles.roundActive}> {item.round[0]} </Text>) : (<Text style={styles.roundInActive}> 1 </Text>)}
-                        {item.round[1] == 2 ? (<Text style={styles.roundActive}> {item.round[1]} </Text>) : (<Text style={styles.roundInActive}> 2 </Text>)}
-                        {item.round[2] == 3 ? (<Text style={styles.roundActive}> {item.round[2]} </Text>) : (<Text style={styles.roundInActive}> 3 </Text>)}
-                        {item.round[3] == 4 ? (<Text style={styles.roundActive}> {item.round[3]} </Text>) : (<Text style={styles.roundInActive}> 4 </Text>)}
-                    </View>
-                    <View style={[styles.minScore]}>
-                        { item.min_score != "" ? (<Text style={styles.minScoreLabel}>ต่ำสุด '62</Text>) : null }
-                        <Text style={styles.score}>{item.min_score}</Text>
-                    </View>
-                </View>
-            </View>
-            
-        </TouchableOpacity>
-    )}
-
-    render() {
+    const WarningModal = () => {
         return (
-            <SafeAreaView style={styles.container}>
-                <View style={styles.navigateTab}>
-                    <Text style={[styles.navigateText, {fontFamily: 'Prompt-Regular', color: '#969696',}]}>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี / คณะวิทยาศาสตร์พบทั้งหมด 9 สาขา </Text>
-                </View>
-                <ScrollView>
-                    <FlatList
-                        data={this.state.data}
-                        renderItem={ ({item}) => this.renderItemList(item) }
-                    />
-                </ScrollView>
-            </SafeAreaView>
-        )
-    }
+            <View style={styles.modalContainer}>
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalVisible}
+                >
+                        <View style={styles.dimWarningGroup}>
+                            <View style={styles.warningGroup}>
+                                <Text style={styles.warningText}>พักสายตาสักหน่อยนะน้อง ^_^</Text>
+                                <Text 
+                                    style={styles.warningCloseText} 
+                                    onPress={() => {
+                                        setModalVisible(false);
+                                        setSeconds(900);
+                                    }}>
+                                        [ปิด]
+                                </Text>
+                            </View>
+                        </View>
+                </Modal>
+            </View>
+        );
+    };
+
+    //  Navigate Tab
+
+    const NavigateTab = () => {
+        return (
+            <View style={styles.navigateTab}>
+                <Text style={[ styles.navigateText, {fontFamily: 'Prompt-Regular', color: '#969696'},]}> 
+                    มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี / คณะวิทยาศาสตร์พบทั้งหมด {datas.length} สาขา
+                </Text>
+            </View>
+        );
+    };
+
+    // Body Function
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <WarningModal/>
+            <NavigateTab />
+            <ScrollView>
+                {
+                    datas.map( items => {
+                        return(
+                            <TouchableOpacity style={styles.item} setOpacityTo={70} key={items.id}>
+                                <View style={styles.top}>
+                                    <Image source={{uri: items.logo}} style={styles.logo}></Image>
+                                    <View style={styles.topRight}>
+                                        <View style={styles.detail}>
+                                        <Text style={styles.faculty}>{items.faculty}</Text>
+                                        <Text style={styles.department}>{items.department}</Text>
+                                        <Text style={styles.university}>{items.university}</Text>
+                                        </View>
+                                        <View style={styles.arrow}>
+                                        <Text style={[styles.university, {fontSize: 12}]}> > </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View style={styles.bottom}>
+                                    <View style={styles.bottomLeft}>
+                                        <Text style={styles.roundLabel}>รอบที่เปิด</Text>
+                                    </View>
+                                    <View style={styles.bottomRight}>
+                                        <View style={styles.roundGroup}>
+                                            {
+                                                <View style={{flexDirection: 'row'}}>
+                                                {items.round.includes("1") == true ? (<Text style={styles.roundActive}> 1 </Text>) : (<Text style={styles.roundInActive}> 1 </Text>)}
+                                                {items.round.includes("2") == true ? (<Text style={styles.roundActive}> 2 </Text>) : (<Text style={styles.roundInActive}> 2 </Text>)}
+                                                {items.round.includes("3") == true ? (<Text style={styles.roundActive}> 3 </Text>) : (<Text style={styles.roundInActive}> 3 </Text>)}
+                                                {items.round.includes("4") == true ? (<Text style={styles.roundActive}> 4 </Text>) : (<Text style={styles.roundInActive}> 4 </Text>)}
+                                                </View>
+                                            }
+                                        </View>
+                                        <View style={[styles.minScore]}>
+                                            {items.min_score != "" ? (<Text style={styles.minScoreLabel}>ต่ำสุด '62</Text>) : null}<Text style={styles.score}>{items.min_score}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            </TouchableOpacity> 
+                        )
+                    })
+                }
+            </ScrollView>
+        </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({
-    // fonts
+
+    // Fonts
+        
     faculty: {
         color: '#e9585f',
         fontSize: 12.5,
         fontFamily: 'Prompt-Bold',
         lineHeight: 18,
-    },
+        },
     department: {
         color: '#949494',
         fontSize: 12.5,
@@ -114,7 +233,8 @@ const styles = StyleSheet.create({
         fontFamily: 'Prompt-Medium',
     },
 
-    //layout
+    // Layout
+
     container: {
         flex: 1,
         height: '100%',
@@ -149,8 +269,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
+    // Customize
 
-    // customize
     item: {
         display: 'flex',
         flexDirection: 'column',
@@ -159,11 +279,11 @@ const styles = StyleSheet.create({
         paddingTop: 11,
         paddingHorizontal: 11,
         marginVertical: 0,
-        borderBottomColor: "#ccc",
+        borderBottomColor: '#ccc',
         borderBottomWidth: 2,
     },
     navigateTab: {
-        paddingVertical: 10,
+        paddingVertical: 8,
         paddingHorizontal: 11,
         backgroundColor: '#eee',
     },
@@ -222,6 +342,50 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         flex: 1,
     },
-  });
 
-export default HomeScreen
+    // Modal
+        
+    modalContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: 'rgba(0,0,0,0.25)',
+    },
+    dimWarningGroup: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0,0,0,0.4)',
+        elevation: 5
+    },
+    warningGroup: {
+        position: 'absolute',
+        top: '50%',
+        left: '10%',
+        zIndex: 2,
+        width: '80%',
+        backgroundColor: '#fff',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 25,
+        borderRadius: 8,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+    warningText: {
+        fontFamily: 'Prompt-Medium',
+        fontSize: 14,
+    },
+    warningCloseText: {
+        fontFamily: 'Prompt-Medium',
+        fontSize: 14,
+        color: '#f81511',
+    },
+})
