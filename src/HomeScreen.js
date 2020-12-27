@@ -5,7 +5,13 @@ import styles from "./StyleSheet";
 
 export default function HomeScreen() {
   
-    // Declare vriable
+    /* 
+        Declare Variable
+        + seconds, state variable, to waring user rest thier eyes when use screen over 15 minutes (900 seconds).
+        + modalVisible , state variable, to display and hide follow the condition in useEffect about seconds.
+        + navigateData, state variable, is mock data about navigateTab such as University and Faculty name.
+        + data, state, is mock data about the department which user interest.
+    */
 
     const [seconds, setSeconds] = React.useState(900);
     const [modalVisible, setModalVisible] = useState(false);
@@ -15,7 +21,7 @@ export default function HomeScreen() {
             "faculty": "คณะวิทยาศาสตร์",
         },
     );
-    const [datas, setDatas] = useState([ 
+    const [data, setData] = useState([ 
         {
             "id": "1",
             "faculty": "คณะวิทยาศาสตร์",
@@ -99,36 +105,6 @@ export default function HomeScreen() {
         },
     ]);
 
-     //  Navigate Tab
-
-     const NavigateTab = (props) => {
-        return (
-            <View style={styles.navigateTab}>
-                <Text style={[ styles.navigateText, {fontFamily: 'Prompt-Regular', color: '#969696'}]}> 
-                    {props.university} / {props.faculty}พบทั้งหมด {datas.length} สาขา
-                </Text>
-            </View>
-        );
-    };
-
-    // Min Score
-
-    const MinScore = (props) => {
-        return (
-            <View style={[styles.minScore]}>
-                {props.score != "" ? (<Text style={styles.minScoreLabel}>ต่ำสุด '62</Text>) : null}<Text style={styles.score}>{props.score}</Text>
-            </View>
-        );
-    };
-
-    // Round Items
-
-    const RoundItem = (props) => {
-        return (
-            <Text style={props.roundActive}> {props.data} </Text>
-        );
-    };
-
     // Warning user to rest their eyes
 
     React.useEffect(() => {
@@ -166,49 +142,97 @@ export default function HomeScreen() {
         );
     };
 
+    //  Navigate Tab
+
+    const NavigateTab = (props) => {
+        return (
+            <View style={styles.navigateTab}>
+                <Text style={[ styles.navigateText, {fontFamily: 'Prompt-Regular', color: '#969696'}]}> 
+                    {props.university} / {props.faculty}พบทั้งหมด {data.length} สาขา
+                </Text>
+            </View>
+        );
+    };
+
+    // Detail List
+
+    const DetailList = (props) => {
+        return(
+            <TouchableOpacity style={styles.item} key={props.id}>
+                <View style={styles.top}>
+                    <Image source={{uri: props.logo}} style={styles.logo}></Image>
+                    <View style={styles.topRight}>
+                        <View style={styles.detail}>
+                            <Text style={styles.faculty}>{props.faculty}</Text>
+                            <Text style={styles.department}>{props.department}</Text>
+                            <Text style={styles.university}>{props.university}</Text>
+                        </View>
+                        <View style={styles.arrow}>
+                            <Text style={[styles.university, {fontSize: 12}]}> > </Text>
+                        </View>
+                    </View>
+                </View>
+                <View style={styles.bottom}>
+                    <View style={styles.bottomLeft}>
+                        <Text style={styles.roundLabel}>รอบที่เปิด</Text>
+                    </View>
+                    <View style={styles.bottomRight}>
+                        <View style={styles.roundGroup}>
+                            {
+                                <View style={{flexDirection: 'row'}}>
+                                    {props.round.includes("1") == true ? (<RoundItem isActive={styles.roundActive} data={1}/>) : (<RoundItem isActive={styles.roundInActive} data={1}/>)}
+                                    {props.round.includes("2") == true ? (<RoundItem isActive={styles.roundActive} data={2}/>) : (<RoundItem isActive={styles.roundInActive} data={2}/>)}
+                                    {props.round.includes("3") == true ? (<RoundItem isActive={styles.roundActive} data={3}/>) : (<RoundItem isActive={styles.roundInActive} data={3}/>)}
+                                    {props.round.includes("4") == true ? (<RoundItem isActive={styles.roundActive} data={4}/>) : (<RoundItem isActive={styles.roundInActive} data={4}/>)}
+                                </View>
+                            }
+                        </View>
+                        <MinScore score={props.min_score}/>
+                    </View>
+                </View>
+            </TouchableOpacity> 
+        )
+    };
+
+    // Min Score
+
+    const MinScore = (props) => {
+        return (
+            <View style={[styles.minScore]}>
+                {props.score != "" ? (<Text style={styles.minScoreLabel}>ต่ำสุด '62</Text>) : null}<Text style={styles.score}>{props.score}</Text>
+            </View>
+        );
+    };
+
+    // Round Items
+
+    const RoundItem = (props) => {
+        return (
+            <Text style={props.isActive}> {props.data} </Text>
+        );
+    };
+
     // Body Function
 
     return (
         <SafeAreaView style={styles.container}>
             <WarningModal/>
-            <NavigateTab university={navigateData.university} faculty={navigateData.faculty} />
+            <NavigateTab 
+                university={navigateData.university} 
+                faculty={navigateData.faculty}
+            />
             <ScrollView>
                 {
-                    datas.map( items => {
+                    data.map( items => {
                         return(
-                            <TouchableOpacity style={styles.item} key={items.id}>
-                                <View style={styles.top}>
-                                    <Image source={{uri: items.logo}} style={styles.logo}></Image>
-                                    <View style={styles.topRight}>
-                                        <View style={styles.detail}>
-                                        <Text style={styles.faculty}>{items.faculty}</Text>
-                                        <Text style={styles.department}>{items.department}</Text>
-                                        <Text style={styles.university}>{items.university}</Text>
-                                        </View>
-                                        <View style={styles.arrow}>
-                                        <Text style={[styles.university, {fontSize: 12}]}> > </Text>
-                                        </View>
-                                    </View>
-                                </View>
-                                <View style={styles.bottom}>
-                                    <View style={styles.bottomLeft}>
-                                        <Text style={styles.roundLabel}>รอบที่เปิด</Text>
-                                    </View>
-                                    <View style={styles.bottomRight}>
-                                        <View style={styles.roundGroup}>
-                                            {
-                                                <View style={{flexDirection: 'row'}}>
-                                                    {items.round.includes("1") == true ? (<RoundItem roundActive={styles.roundActive} data={1}/>) : (<RoundItem roundActive={styles.roundInActive} data={1}/>)}
-                                                    {items.round.includes("2") == true ? (<RoundItem roundActive={styles.roundActive} data={2}/>) : (<RoundItem roundActive={styles.roundInActive} data={2}/>)}
-                                                    {items.round.includes("3") == true ? (<RoundItem roundActive={styles.roundActive} data={3}/>) : (<RoundItem roundActive={styles.roundInActive} data={3}/>)}
-                                                    {items.round.includes("4") == true ? (<RoundItem roundActive={styles.roundActive} data={4}/>) : (<RoundItem roundActive={styles.roundInActive} data={4}/>)}
-                                                </View>
-                                            }
-                                        </View>
-                                        <MinScore score={items.min_score}/>
-                                    </View>
-                                </View>
-                            </TouchableOpacity> 
+                            <DetailList 
+                                id={items.id} 
+                                logo={items.logo} faculty={items.faculty} 
+                                department={items.department} 
+                                university={items.university} 
+                                round={items.round} 
+                                min_score={items.min_score} 
+                            /> 
                         )
                     })
                 }
