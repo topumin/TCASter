@@ -8,7 +8,13 @@ export default function HomeScreen() {
 
     const [seconds, setSeconds] = React.useState(900);
     const [modalVisible, setModalVisible] = useState(false);
-    const [datas, setData] = useState([ 
+    const [navigateData, setNavigateData] = useState(
+        {
+            "university": "มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี",
+            "faculty": "คณะวิทยาศาสตร์",
+        },
+    );
+    const [datas, setDatas] = useState([ 
         {
             "id": "1",
             "faculty": "คณะวิทยาศาสตร์",
@@ -131,13 +137,31 @@ export default function HomeScreen() {
 
     //  Navigate Tab
 
-    const NavigateTab = () => {
+    const NavigateTab = (props) => {
         return (
             <View style={styles.navigateTab}>
-                <Text style={[ styles.navigateText, {fontFamily: 'Prompt-Regular', color: '#969696'},]}> 
-                    มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนุบรี / คณะวิทยาศาสตร์พบทั้งหมด {datas.length} สาขา
+                <Text style={[ styles.navigateText, {fontFamily: 'Prompt-Regular', color: '#969696'}]}> 
+                    {props.university} / {props.faculty}พบทั้งหมด {datas.length} สาขา
                 </Text>
             </View>
+        );
+    };
+
+    // Min Score
+
+    const MinScore = (props) => {
+        return (
+            <View style={[styles.minScore]}>
+                {props.score != "" ? (<Text style={styles.minScoreLabel}>ต่ำสุด '62</Text>) : null}<Text style={styles.score}>{props.score}</Text>
+            </View>
+        );
+    };
+
+    // Round Items
+
+    const RoundItem = (props) => {
+        return (
+            <Text style={props.roundActive}> {props.data} </Text>
         );
     };
 
@@ -146,12 +170,12 @@ export default function HomeScreen() {
     return (
         <SafeAreaView style={styles.container}>
             <WarningModal/>
-            <NavigateTab />
+            <NavigateTab university={navigateData.university} faculty={navigateData.faculty} />
             <ScrollView>
                 {
                     datas.map( items => {
                         return(
-                            <TouchableOpacity style={styles.item} setOpacityTo={70} key={items.id}>
+                            <TouchableOpacity style={styles.item} key={items.id}>
                                 <View style={styles.top}>
                                     <Image source={{uri: items.logo}} style={styles.logo}></Image>
                                     <View style={styles.topRight}>
@@ -173,16 +197,14 @@ export default function HomeScreen() {
                                         <View style={styles.roundGroup}>
                                             {
                                                 <View style={{flexDirection: 'row'}}>
-                                                {items.round.includes("1") == true ? (<Text style={styles.roundActive}> 1 </Text>) : (<Text style={styles.roundInActive}> 1 </Text>)}
-                                                {items.round.includes("2") == true ? (<Text style={styles.roundActive}> 2 </Text>) : (<Text style={styles.roundInActive}> 2 </Text>)}
-                                                {items.round.includes("3") == true ? (<Text style={styles.roundActive}> 3 </Text>) : (<Text style={styles.roundInActive}> 3 </Text>)}
-                                                {items.round.includes("4") == true ? (<Text style={styles.roundActive}> 4 </Text>) : (<Text style={styles.roundInActive}> 4 </Text>)}
+                                                    {items.round.includes("1") == true ? (<RoundItem roundActive={styles.roundActive} data={1}/>) : (<RoundItem roundActive={styles.roundInActive} data={1}/>)}
+                                                    {items.round.includes("2") == true ? (<RoundItem roundActive={styles.roundActive} data={2}/>) : (<RoundItem roundActive={styles.roundInActive} data={2}/>)}
+                                                    {items.round.includes("3") == true ? (<RoundItem roundActive={styles.roundActive} data={3}/>) : (<RoundItem roundActive={styles.roundInActive} data={3}/>)}
+                                                    {items.round.includes("4") == true ? (<RoundItem roundActive={styles.roundActive} data={4}/>) : (<RoundItem roundActive={styles.roundInActive} data={4}/>)}
                                                 </View>
                                             }
                                         </View>
-                                        <View style={[styles.minScore]}>
-                                            {items.min_score != "" ? (<Text style={styles.minScoreLabel}>ต่ำสุด '62</Text>) : null}<Text style={styles.score}>{items.min_score}</Text>
-                                        </View>
+                                        <MinScore score={items.min_score}/>
                                     </View>
                                 </View>
                             </TouchableOpacity> 
