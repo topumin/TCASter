@@ -45,10 +45,10 @@ export class HomeScreen extends Component {
                 </View>
                 <View style={styles.bottomRight}>
                     <View style={styles.roundGroup}>
-                        {item.round[0] == 1 ? (<Text style={styles.roundActive}> {item.round[0]} </Text>) : (<Text style={styles.roundInActive}> 1 </Text>)}
-                        {item.round[1] == 2 ? (<Text style={styles.roundActive}> {item.round[1]} </Text>) : (<Text style={styles.roundInActive}> 2 </Text>)}
-                        {item.round[2] == 3 ? (<Text style={styles.roundActive}> {item.round[2]} </Text>) : (<Text style={styles.roundInActive}> 3 </Text>)}
-                        {item.round[3] == 4 ? (<Text style={styles.roundActive}> {item.round[3]} </Text>) : (<Text style={styles.roundInActive}> 4 </Text>)}
+                        {item.round[0].includes("1") ? (<Text style={styles.roundActive}> 1 </Text>) : (<Text style={styles.roundInActive}> 1 </Text>)}
+                        {item.round[1].includes("2") ? (<Text style={styles.roundActive}> 2 </Text>) : (<Text style={styles.roundInActive}> 2 </Text>)}
+                        {item.round[2].includes("3") ? (<Text style={styles.roundActive}> 3 </Text>) : (<Text style={styles.roundInActive}> 3 </Text>)}
+                        {item.round[3].includes("4") ? (<Text style={styles.roundActive}> 4 </Text>) : (<Text style={styles.roundInActive}> 4 </Text>)}
                     </View>
                     <View style={[styles.minScore]}>
                         { item.min_score != "" ? (<Text style={styles.minScoreLabel}>ต่ำสุด '62</Text>) : null }
